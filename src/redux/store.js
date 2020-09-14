@@ -5,8 +5,6 @@ import userReducer from "./reducers/userReducer"
 import dataReducer from "./reducers/dataReducer"
 import uiReducer from "./reducers/uiReducer"
 
-//import checkTokenExpirationMiddleware from "./middleware"
-
 const initialState = {}
 
 const middleware = [thunk]
@@ -17,13 +15,14 @@ const rootReducer = combineReducers({
     user: userReducer
 })
 
-const store = createStore(
-    rootReducer,
-    initialState,
-    compose(
-        applyMiddleware(...middleware),
-        window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-    )
-)
+//makes it use regular compose when browser doesn't have react-dev-tools extention
+const composeEnhancers =
+    typeof window === "object" && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+        ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
+        : compose
+
+const enhancer = composeEnhancers(applyMiddleware(...middleware))
+
+const store = createStore(rootReducer, initialState, enhancer)
 
 export default store
