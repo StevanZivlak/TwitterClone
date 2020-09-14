@@ -1,8 +1,9 @@
 import { MenuItem } from "@material-ui/core"
-import React from "react"
+import React, { forwardRef } from "react"
 import SingularNotification from "./SingularNotification"
 
-function NotificationsList({ notifications, handleClose }) {
+//have to take ref to avoid errors because MUI menu sends it
+const NotificationsList = forwardRef(({ notifications, handleClose }, ref) => {
     if (!notifications || notifications.length <= 0)
         return <MenuItem onClick={handleClose}>You have no notifications yet.</MenuItem>
 
@@ -11,6 +12,6 @@ function NotificationsList({ notifications, handleClose }) {
             <SingularNotification notification={notification} />
         </MenuItem>
     ))
-}
+})
 
 export default NotificationsList
